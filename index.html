@@ -292,6 +292,39 @@
                 font-size: 1.8rem;
             }
         }
+
+        /* Interpretations panel styles */
+        .interpretations-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 800px;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .interpretation-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .interpretation-section h3 {
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .interpretation-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dotted #eee;
+        }
+
+        .interpretation-title {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -407,69 +440,17 @@
                 <!-- Inner circle for houses -->
                 <circle cx="400" cy="400" r="280" fill="white" stroke="#d0c5e5" stroke-width="1"/>
                 
-                <!-- House divisions (sample) -->
-                <g id="houses" transform="translate(400, 400)" stroke="#bbb" stroke-width="1" stroke-dasharray="5,3">
-                    <line x1="0" y1="-350" x2="0" y2="-280" />
-                    <line x1="175" y1="-303.1" x2="140" y2="-242.5" />
-                    <line x1="303.1" y1="-175" x2="242.5" y2="-140" />
-                    <line x1="350" y1="0" x2="280" y2="0" />
-                    <line x1="303.1" y1="175" x2="242.5" y2="140" />
-                    <line x1="175" y1="303.1" x2="140" y2="242.5" />
-                    <line x1="0" y1="350" x2="0" y2="280" />
-                    <line x1="-175" y1="303.1" x2="-140" y2="242.5" />
-                    <line x1="-303.1" y1="175" x2="-242.5" y2="140" />
-                    <line x1="-350" y1="0" x2="-280" y2="0" />
-                    <line x1="-303.1" y1="-175" x2="-242.5" y2="-140" />
-                    <line x1="-175" y1="-303.1" x2="-140" y2="-242.5" />
-                </g>
+                <!-- House divisions (will be dynamically updated) -->
+                <g id="houses" transform="translate(400, 400)" stroke="#bbb" stroke-width="1" stroke-dasharray="5,3"></g>
                 
                 <!-- Center circle -->
                 <circle cx="400" cy="400" r="200" fill="white" stroke="#d0c5e5" stroke-width="1"/>
                 
-                <!-- Sample planet positions -->
-                <g id="planets" transform="translate(400, 400)">
-                    <!-- Sun at 15° Aries -->
-                    <g class="planet" data-name="Sun" data-position="15° Aries">
-                        <circle cx="134" cy="-315" r="15" fill="#ffdd44" stroke="#ff9900" stroke-width="2" filter="url(#glow)" class="planet-symbol" />
-                        <text x="134" y="-310" text-anchor="middle" fill="#333" font-size="16">☉</text>
-                    </g>
-                    
-                    <!-- Moon at 23° Cancer -->
-                    <g class="planet" data-name="Moon" data-position="23° Cancer">
-                        <circle cx="315" cy="134" r="15" fill="#f0f0f0" stroke="#cccccc" stroke-width="2" class="planet-symbol" />
-                        <text x="315" y="139" text-anchor="middle" fill="#333" font-size="16">☽</text>
-                    </g>
-                    
-                    <!-- Mercury at 5° Pisces -->
-                    <g class="planet" data-name="Mercury" data-position="5° Pisces">
-                        <circle cx="-175" cy="-303" r="15" fill="#88ccff" stroke="#3399ff" stroke-width="2" class="planet-symbol" />
-                        <text x="-175" y="-298" text-anchor="middle" fill="#333" font-size="16">☿</text>
-                    </g>
-                    
-                    <!-- Venus at 19° Aquarius -->
-                    <g class="planet" data-name="Venus" data-position="19° Aquarius">
-                        <circle cx="-285" cy="-205" r="15" fill="#ffaacc" stroke="#ff6699" stroke-width="2" class="planet-symbol" />
-                        <text x="-285" y="-200" text-anchor="middle" fill="#333" font-size="16">♀</text>
-                    </g>
-                    
-                    <!-- Mars at 10° Scorpio -->
-                    <g class="planet" data-name="Mars" data-position="10° Scorpio">
-                        <circle cx="-205" cy="285" r="15" fill="#ff6666" stroke="#cc0000" stroke-width="2" class="planet-symbol" />
-                        <text x="-205" y="290" text-anchor="middle" fill="#333" font-size="16">♂</text>
-                    </g>
-                </g>
+                <!-- Planet positions (will be dynamically updated) -->
+                <g id="planets" transform="translate(400, 400)"></g>
                 
-                <!-- Sample aspect lines -->
-                <g id="aspects" transform="translate(400, 400)" stroke-opacity="0.6">
-                    <!-- Sun trine Moon -->
-                    <line x1="134" y1="-315" x2="315" y2="134" stroke="#44dd44" stroke-width="1.5" class="aspect-line" data-aspect="Trine: Sun to Moon" />
-                    
-                    <!-- Mercury square Mars -->
-                    <line x1="-175" y1="-303" x2="-205" y2="285" stroke="#ff4444" stroke-width="1.5" class="aspect-line" data-aspect="Square: Mercury to Mars" />
-                    
-                    <!-- Venus sextile Moon -->
-                    <line x1="-285" y1="-205" x2="315" y2="134" stroke="#4499ff" stroke-width="1.5" class="aspect-line" data-aspect="Sextile: Venus to Moon" />
-                </g>
+                <!-- Aspect lines (will be dynamically updated) -->
+                <g id="aspects" transform="translate(400, 400)" stroke-opacity="0.6"></g>
                 
                 <!-- Central design element -->
                 <circle cx="400" cy="400" r="50" fill="url(#wheel-gradient)" stroke="var(--primary-color)" stroke-width="2" />
@@ -481,19 +462,22 @@
         </div>
 
         <div class="controls">
-            <button class="control-btn active">
+            <button class="control-btn active" data-view="wheel">
                 <i class="fas fa-chart-pie"></i> Wheel
             </button>
-            <button class="control-btn">
+            <button class="control-btn" data-view="aspects">
                 <i class="fas fa-table"></i> Aspects
             </button>
-            <button class="control-btn">
+            <button class="control-btn" data-view="houses">
                 <i class="fas fa-sliders-h"></i> Houses
             </button>
-            <button class="control-btn">
+            <button class="control-btn" data-view="transits">
                 <i class="fas fa-calendar-alt"></i> Transits
             </button>
-            <button class="control-btn">
+            <button class="control-btn" data-view="interpretations">
+                <i class="fas fa-book"></i> Readings
+            </button>
+            <button class="control-btn" id="save-chart">
                 <i class="fas fa-download"></i> Save
             </button>
         </div>
@@ -548,6 +532,38 @@
                 <span>Pisces</span>
             </div>
         </div>
+
+        <!-- Interpretations panel (hidden by default) -->
+        <div class="interpretations-panel" id="interpretations-panel">
+            <h2 class="form-title">Intuitive Astrology Reading</h2>
+            
+            <div class="interpretation-section">
+                <h3>Sun Sign</h3>
+                <div class="interpretation-item">
+                    <div class="interpretation-title" id="sun-sign-title">Sun in Aries</div>
+                    <div class="interpretation-content" id="sun-sign-content">
+                        Your Sun in Aries represents your core essence, bringing forth qualities of initiative, courage, and self-assertion. You're naturally pioneering and possess the energy to take action and lead the way. Your identity is tied to your ability to be authentic, direct, and to make your own path. Learning to channel your fiery energy constructively is key to your personal development journey.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="interpretation-section">
+                <h3>Moon Sign</h3>
+                <div class="interpretation-item">
+                    <div class="interpretation-title" id="moon-sign-title">Moon in Cancer</div>
+                    <div class="interpretation-content" id="moon-sign-content">
+                        Your Moon in Cancer reveals your emotional nature, which is nurturing, sensitive, and deeply intuitive. Your feelings run deep, and you're naturally attuned to the emotional currents around you. Home, security, and family connections are essential for your emotional wellbeing. Your inner world is rich with memories and feelings that connect past to present, creating a strong foundation for your intuitive abilities.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="interpretation-section">
+                <h3>Key Aspects</h3>
+                <div id="aspects-interpretations">
+                    <!-- Aspect interpretations will be added here dynamically -->
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer>
@@ -555,102 +571,58 @@
         <div class="subtitle">Create Your Cosmic Blueprint</div>
     </footer>
 
+    <!-- Include the external JavaScript file -->
+    <script src="astrology-wheel.js"></script>
+
+    <!-- Additional configuration script if needed -->
     <script>
-        // JavaScript to handle the chart interactions
+        // Add event listeners for the control buttons to toggle views
         document.addEventListener('DOMContentLoaded', function() {
-            // Sample data - in a real app, this would come from calculations based on birth details
-            const planets = [
-                { name: "Sun", position: "15° Aries", x: 134, y: -315 },
-                { name: "Moon", position: "23° Cancer", x: 315, y: 134 },
-                { name: "Mercury", position: "5° Pisces", x: -175, y: -303 },
-                { name: "Venus", position: "19° Aquarius", x: -285, y: -205 },
-                { name: "Mars", position: "10° Scorpio", x: -205, y: 285 }
-            ];
-
-            const aspects = [
-                { type: "Trine", from: "Sun", to: "Moon", color: "#44dd44" },
-                { type: "Square", from: "Mercury", to: "Mars", color: "#ff4444" },
-                { type: "Sextile", from: "Venus", to: "Moon", color: "#4499ff" }
-            ];
-
-            // Handle planet hover and tooltip display
-            const planetElements = document.querySelectorAll('.planet-symbol');
-            const planetInfo = document.getElementById('planet-info');
-
-            planetElements.forEach(planet => {
-                planet.addEventListener('mouseenter', function(e) {
-                    const planetGroup = e.target.closest('.planet');
-                    const name = planetGroup.dataset.name;
-                    const position = planetGroup.dataset.position;
-                    
-                    planetInfo.innerHTML = `<strong>${name}</strong><br>${position}`;
-                    planetInfo.style.display = 'block';
-                    planetInfo.style.left = `${e.pageX + 15}px`;
-                    planetInfo.style.top = `${e.pageY + 15}px`;
-                });
-
-                planet.addEventListener('mouseleave', function() {
-                    planetInfo.style.display = 'none';
-                });
-            });
-
-            // Handle aspect lines hover
-            const aspectLines = document.querySelectorAll('.aspect-line');
-            
-            aspectLines.forEach(line => {
-                line.addEventListener('mouseenter', function(e) {
-                    const aspect = e.target.dataset.aspect;
-                    
-                    planetInfo.innerHTML = aspect;
-                    planetInfo.style.display = 'block';
-                    planetInfo.style.left = `${e.pageX + 15}px`;
-                    planetInfo.style.top = `${e.pageY + 15}px`;
-                    
-                    e.target.setAttribute('stroke-width', '3');
-                });
-
-                line.addEventListener('mouseleave', function(e) {
-                    planetInfo.style.display = 'none';
-                    e.target.setAttribute('stroke-width', '1.5');
-                });
-            });
-
-            // Handle control buttons
-            const controlButtons = document.querySelectorAll('.control-btn');
+            const controlButtons = document.querySelectorAll('.control-btn[data-view]');
+            const interpretationsPanel = document.getElementById('interpretations-panel');
             
             controlButtons.forEach(button => {
                 button.addEventListener('click', function() {
+                    // Toggle active button
                     controlButtons.forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
                     
-                    // In a real app, this would toggle different views or features
+                    // Handle different views
+                    const view = this.dataset.view;
+                    
+                    // Show/hide interpretations panel
+                    if (view === 'interpretations') {
+                        interpretationsPanel.style.display = 'block';
+                    } else {
+                        interpretationsPanel.style.display = 'none';
+                    }
                 });
             });
-
-            // Handle chart generation button
-            const generateBtn = document.getElementById('generate-chart');
             
-            generateBtn.addEventListener('click', function() {
-                const name = document.getElementById('name').value;
-                const birthDate = document.getElementById('birth-date').value;
-                const birthTime = document.getElementById('birth-time').value;
-                const birthLocation = document.getElementById('birth-location').value;
+            // Handle save button click
+            document.getElementById('save-chart').addEventListener('click', function() {
+                // Create a snapshot of the chart SVG
+                const svg = document.getElementById('chart-svg');
+                const serializer = new XMLSerializer();
+                const svgStr = serializer.serializeToString(svg);
                 
-                if (!birthDate) {
-                    alert('Please enter a birth date');
-                    return;
-                }
+                // Create a data URL
+                const svgBlob = new Blob([svgStr], {type: 'image/svg+xml;charset=utf-8'});
+                const url = URL.createObjectURL(svgBlob);
                 
-                // In a real app, this would trigger the calculation of the chart
-                // For now, we'll just animate the wheel to simulate a regeneration
-                const wheel = document.getElementById('zodiac-wheel');
-                wheel.style.animation = 'rotateIn 1.5s';
+                // Create download link
+                const link = document.createElement('a');
+                link.href = url;
                 
-                setTimeout(() => {
-                    wheel.style.animation = '';
-                }, 1500);
+                // Get name for the file (use the name entered or default)
+                const name = document.getElementById('name').value || 'anonymous';
+                const date = new Date().toISOString().slice(0, 10);
+                link.download = `${name}-astrology-chart-${date}.svg`;
                 
-                alert(`Chart generated for ${name || 'Anonymous'}\nBirth: ${birthDate} ${birthTime || ''}\nLocation: ${birthLocation || 'Unknown'}`);
+                // Trigger download
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             });
         });
     </script>
