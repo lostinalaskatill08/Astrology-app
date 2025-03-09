@@ -1,1 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intuitive Astrology Wheel</title>
+    <style>
+        :root {
+            --primary-color: #6247aa;
+            --secondary-color: #a06cd5;
+            --accent-color: #ff7d00;
+            --background-color: #f8f5ff;
+            --text-color: #333;
+            --light-text: #f0f0f0;
+            --aries-color: #ff4d4d;
+            --taurus-color: #65b891;
+            --gemini-color: #ffce56;
+            --cancer-color: #88c9e0;
+            --leo-color: #ff9f43;
+            --virgo-color: #a8e6cf;
+            --libra-color: #dda0dd;
+            --scorpio-color: #c71585;
+            --sagittarius-color: #9370db;
+            --capricorn-color: #4b4b4b;
+            --aquarius-color: #00bfff;
+            --pisces-color: #7ed6df;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: normal;
+        }
+
+        .subtitle {
+            font-style: italic;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .birth-form {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .form-title {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-row {
+            display: flex;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: block;
+            margin: 1.5rem auto 0;
+            min-width: 200px;
+        }
+
+        button:hover {
+            background: #ff9628;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .wheel-svg {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .control-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .control-btn i {
+            font-size: 1.1rem;
+        }
+
+        .legend {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 800px;
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Zodiac sign styles for the wheel */
+        .zodiac-sign {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .zodiac-segment {
+            transition: transform 0.3s;
+        }
+
+        .zodiac-segment:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .aspect-line {
+            stroke-width: 1.5;
+            transition: stroke-width 0.3s;
+        }
+
+        .aspect-line:hover {
+            stroke-width: 3;
+        }
+
+        .planet-symbol {
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .planet-symbol:hover {
+            transform: scale(1.2);
+        }
+
+        .planet-info {
+            display: none;
+            position: absolute;
+            background: white;
+            border-radius: 5px;
+            padding: 0.75rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            max-width: 200px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes rotateIn {
+            from { transform: rotate(-30deg); opacity: 0; }
+            to { transform: rotate(0); opacity: 1; }
+        }
+
+        .chart-container {
+            animation: fadeIn 1.5s;
+        }
+
+        .wheel-svg {
+            animation: rotateIn 1.5s;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Intuitive Astrology Wheel</h1>
+        <div class="subtitle">Discover your cosmic blueprint</div>
+    </header>
+
+    <main>
+        <div class="birth-form">
+            <h2 class="form-title">Enter Your Birth Details</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Your name">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="birth-date">Birth Date</label>
+                    <input type="date" id="birth-date">
+                </div>
+                <div class="form-group">
+                    <label for="birth-time">Birth Time</label>
+                    <input type="time" id="birth-time">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="birth-location">Birth Location</label>
+                    <input type="text" id="birth-location" placeholder="City, Country">
+                </div>
+            </div>
+            <button id="generate-chart">Generate Chart</button>
+        </div>
+
+        <div class="chart-container">
+            <svg class="wheel-svg" viewBox="0 0 800 800" id="chart-svg">
+                <!-- Chart will be generated here by JavaScript -->
+                <defs>
+                    <radialGradient id="wheel-gradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" stop-color="#ffffff" />
+                        <stop offset="85%" stop-color="#f8f5ff" />
+                        <stop offset="100%" stop-color="#e9dfff" />
+                    </radialGradient>
+                    
+                    <!-- Zodiac sign patterns -->
+                    <pattern id="aries-pattern" patternUnits="userSpaceOnUse" width="60" height="60">
+                        <circle cx="30" cy="30" r="25" fill="none" stroke="var(--aries-color)" stroke-width="1" opacity="0.2"/>
+                    </pattern>
+                    
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                    </filter>
+                </defs>
+
+                <!-- Background circle -->
+                <circle cx="400" cy="400" r="390" fill="url(#wheel-gradient)" stroke="#d0c5e5" stroke-width="2"/>
+                
+                <!-- Zodiac wheel with 12 segments -->
+                <g id="zodiac-wheel" transform="translate(400, 400)">
+                    <!-- Aries: 0° -->
+                    <path d="M 0 -350 A 350 350 0 0 1 175 -303.1" fill="var(--aries-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="100" y="-320" class="zodiac-sign" fill="var(--aries-color)">♈</text>
+                    
+                    <!-- Taurus: 30° -->
+                    <path d="M 175 -303.1 A 350 350 0 0 1 303.1 -175" fill="var(--taurus-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="245" y="-245" class="zodiac-sign" fill="var(--taurus-color)">♉</text>
+                    
+                    <!-- Gemini: 60° -->
+                    <path d="M 303.1 -175 A 350 350 0 0 1 350 0" fill="var(--gemini-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="320" y="-100" class="zodiac-sign" fill="var(--gemini-color)">♊</text>
+                    
+                    <!-- Cancer: 90° -->
+                    <path d="M 350 0 A 350 350 0 0 1 303.1 175" fill="var(--cancer-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="320" y="100" class="zodiac-sign" fill="var(--cancer-color)">♋</text>
+                    
+                    <!-- Leo: 120° -->
+                    <path d="M 303.1 175 A 350 350 0 0 1 175 303.1" fill="var(--leo-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="245" y="245" class="zodiac-sign" fill="var(--leo-color)">♌</text>
+                    
+                    <!-- Virgo: 150° -->
+                    <path d="M 175 303.1 A 350 350 0 0 1 0 350" fill="var(--virgo-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="100" y="320" class="zodiac-sign" fill="var(--virgo-color)">♍</text>
+                    
+                    <!-- Libra: 180° -->
+                    <path d="M 0 350 A 350 350 0 0 1 -175 303.1" fill="var(--libra-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="-100" y="320" class="zodiac-sign" fill="var(--libra-color)">♎</text>
+                    
+                    <!-- Scorpio: 210° -->
+                    <path d="M -175 303.1 A 350 350 0 0 1 -303.1 175" fill="var(--scorpio-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="-245" y="245" class="zodiac-sign" fill="var(--scorpio-color)">♏</text>
+                    
+                    <!-- Sagittarius: 240° -->
+                    <path d="M -303.1 175 A 350 350 0 0 1 -350 0" fill="var(--sagittarius-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="-320" y="100" class="zodiac-sign" fill="var(--sagittarius-color)">♐</text>
+                    
+                    <!-- Capricorn: 270° -->
+                    <path d="M -350 0 A 350 350 0 0 1 -303.1 -175" fill="var(--capricorn-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="-320" y="-100" class="zodiac-sign" fill="var(--capricorn-color)">♑</text>
+                    
+                    <!-- Aquarius: 300° -->
+                    <path d="M -303.1 -175 A 350 350 0 0 1 -175 -303.1" fill="var(--aquarius-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="-245" y="-245" class="zodiac-sign" fill="var(--aquarius-color)">♒</text>
+                    
+                    <!-- Pisces: 330° -->
+                    <path d="M -175 -303.1 A 350 350 0 0 1 0 -350" fill="var(--pisces-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+                    <text x="-100" y="-320" class="zodiac-sign" fill="var(--pisces-color)">♓</text>
+                </g>
+                
+                <!-- Inner circle for houses -->
+                <circle cx="400" cy="400" r="280" fill="white" stroke="#d0c5e5" stroke-width="1"/>
+                
+                <!-- House divisions (sample) -->
+                <g id="houses" transform="translate(400, 400)" stroke="#bbb" stroke-width="1" stroke-dasharray="5,3">
+                    <line x1="0" y1="-350" x2="0" y2="-280" />
+                    <line x1="175" y1="-303.1" x2="140" y2="-242.5" />
+                    <line x1="303.1" y1="-175" x2="242.5" y2="-140" />
+                    <line x1="350" y1="0" x2="280" y2="0" />
+                    <line x1="303.1" y1="175" x2="242.5" y2="140" />
+                    <line x1="175" y1="303.1" x2="140" y2="242.5" />
+                    <line x1="0" y1="350" x2="0" y2="280" />
+                    <line x1="-175" y1="303.1" x2="-140" y2="242.5" />
+                    <line x1="-303.1" y1="175" x2="-242.5" y2="140" />
+                    <line x1="-350" y1="0" x2="-280" y2="0" />
+                    <line x1="-303.1" y1="-175" x2="-242.5" y2="-140" />
+                    <line x1="-175" y1="-303.1" x2="-140" y2="-242.5" />
+                </g>
+                
+                <!-- Center circle -->
+                <circle cx="400" cy="400" r="200" fill="white" stroke="#d0c5e5" stroke-width="1"/>
+                
+                <!-- Sample planet positions -->
+                <g id="planets" transform="translate(400, 400)">
+                    <!-- Sun at 15° Aries -->
+                    <g class="planet" data-name="Sun" data-position="15° Aries">
+                        <circle cx="134" cy="-315" r="15" fill="#ffdd44" stroke="#ff9900" stroke-width="2" filter="url(#glow)" class="planet-symbol" />
+                        <text x="134" y="-310" text-anchor="middle" fill="#333" font-size="16">☉</text>
+                    </g>
+                    
+                    <!-- Moon at 23° Cancer -->
+                    <g class="planet" data-name="Moon" data-position="23° Cancer">
+                        <circle cx="315" cy="134" r="15" fill="#f0f0f0" stroke="#cccccc" stroke-width="2" class="planet-symbol" />
+                        <text x="315" y="139" text-anchor="middle" fill="#333" font-size="16">☽</text>
+                    </g>
+                    
+                    <!-- Mercury at 5° Pisces -->
+                    <g class="planet" data-name="Mercury" data-position="5° Pisces">
+                        <circle cx="-175" cy="-303" r="15" fill="#88ccff" stroke="#3399ff" stroke-width="2" class="planet-symbol" />
+                        <text x="-175" y="-298" text-anchor="middle" fill="#333" font-size="16">☿</text>
+                    </g>
+                    
+                    <!-- Venus at 19° Aquarius -->
+                    <g class="planet" data-name="Venus" data-position="19° Aquarius">
+                        <circle cx="-285" cy="-205" r="15" fill="#ffaacc" stroke="#ff6699" stroke-width="2" class="planet-symbol" />
+                        <text x="-285" y="-200" text-anchor="middle" fill="#333" font-size="16">♀</text>
+                    </g>
+                    
+                    <!-- Mars at 10° Scorpio -->
+                    <g class="planet" data-name="Mars" data-position="10° Scorpio">
+                        <circle cx="-205" cy="285" r="15" fill="#ff6666" stroke="#cc0000" stroke-width="2" class="planet-symbol" />
+                        <text x="-205" y="290" text-anchor="middle" fill="#333" font-size="16">♂</text>
+                    </g>
+                </g>
+                
+                <!-- Sample aspect lines -->
+                <g id="aspects" transform="translate(400, 400)" stroke-opacity="0.6">
+                    <!-- Sun trine Moon -->
+                    <line x1="134" y1="-315" x2="315" y2="134" stroke="#44dd44" stroke-width="1.5" class="aspect-line" data-aspect="Trine: Sun to Moon" />
+                    
+                    <!-- Mercury square Mars -->
+                    <line x1="-175" y1="-303" x2="-205" y2="285" stroke="#ff4444" stroke-width="1.5" class="aspect-line" data-aspect="Square: Mercury to Mars" />
+                    
+                    <!-- Venus sextile Moon -->
+                    <line x1="-285" y1="-205" x2="315" y2="134" stroke="#4499ff" stroke-width="1.5" class="aspect-line" data-aspect="Sextile: Venus to Moon" />
+                </g>
+                
+                <!-- Central design element -->
+                <circle cx="400" cy="400" r="50" fill="url(#wheel-gradient)" stroke="var(--primary-color)" stroke-width="2" />
+                <text x="400" y="405" text-anchor="middle" font-size="20" fill="var(--primary-color)">✧</text>
+            </svg>
+            
+            <!-- Planet info tooltip (appears on hover) -->
+            <div class="planet-info" id="planet-info"></div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn active">
+                <i class="fas fa-chart-pie"></i> Wheel
+            </button>
+            <button class="control-btn">
+                <i class="fas fa-table"></i> Aspects
+            </button>
+            <button class="control-btn">
+                <i class="fas fa-sliders-h"></i> Houses
+            </button>
+            <button class="control-btn">
+                <i class="fas fa-calendar-alt"></i> Transits
+            </button>
+            <button class="control-btn">
+                <i class="fas fa-download"></i> Save
+            </button>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--aries-color);"></div>
+                <span>Aries</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--taurus-color);"></div>
+                <span>Taurus</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--gemini-color);"></div>
+                <span>Gemini</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--cancer-color);"></div>
+                <span>Cancer</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--leo-color);"></div>
+                <span>Leo</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--virgo-color);"></div>
+                <span>Virgo</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--libra-color);"></div>
+                <span>Libra</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--scorpio-color);"></div>
+                <span>Scorpio</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--sagittarius-color);"></div>
+                <span>Sagittarius</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--capricorn-color);"></div>
+                <span>Capricorn</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--aquarius-color);"></div>
+                <span>Aquarius</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--pisces-color);"></div>
+                <span>Pisces</span>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div>Intuitive Astrology Wheel © 2025</div>
+        <div class="subtitle">Create Your Cosmic Blueprint</div>
+    </footer>
+
+    <script>
+        // JavaScript to handle the chart interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample data - in a real app, this would come from calculations based on birth details
+            const planets = [
+                { name: "Sun", position: "15° Aries", x: 134, y: -315 },
+                { name: "Moon", position: "23° Cancer", x: 315, y: 134 },
+                { name: "Mercury", position: "5° Pisces", x: -175, y: -303 },
+                { name: "Venus", position: "19° Aquarius", x: -285, y: -205 },
+                { name: "Mars", position: "10° Scorpio", x: -205, y: 285 }
+            ];
+
+            const aspects = [
+                { type: "Trine", from: "Sun", to: "Moon", color: "#44dd44" },
+                { type: "Square", from: "Mercury", to: "Mars", color: "#ff4444" },
+                { type: "Sextile", from: "Venus", to: "Moon", color: "#4499ff" }
+            ];
+
+            // Handle planet hover and tooltip display
+            const planetElements = document.querySelectorAll('.planet-symbol');
+            const planetInfo = document.getElementById('planet-info');
+
+            planetElements.forEach(planet => {
+                planet.addEventListener('mouseenter', function(e) {
+                    const planetGroup = e.target.closest('.planet');
+                    const name = planetGroup.dataset.name;
+                    const position = planetGroup.dataset.position;
+                    
+                    planetInfo.innerHTML = `<strong>${name}</strong><br>${position}`;
+                    planetInfo.style.display = 'block';
+                    planetInfo.style.left = `${e.pageX + 15}px`;
+                    planetInfo.style.top = `${e.pageY + 15}px`;
+                });
+
+                planet.addEventListener('mouseleave', function() {
+                    planetInfo.style.display = 'none';
+                });
+            });
+
+            // Handle aspect lines hover
+            const aspectLines = document.querySelectorAll('.aspect-line');
+            
+            aspectLines.forEach(line => {
+                line.addEventListener('mouseenter', function(e) {
+                    const aspect = e.target.dataset.aspect;
+                    
+                    planetInfo.innerHTML = aspect;
+                    planetInfo.style.display = 'block';
+                    planetInfo.style.left = `${e.pageX + 15}px`;
+                    planetInfo.style.top = `${e.pageY + 15}px`;
+                    
+                    e.target.setAttribute('stroke-width', '3');
+                });
+
+                line.addEventListener('mouseleave', function(e) {
+                    planetInfo.style.display = 'none';
+                    e.target.setAttribute('stroke-width', '1.5');
+                });
+            });
+
+            // Handle control buttons
+            const controlButtons = document.querySelectorAll('.control-btn');
+            
+            controlButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    controlButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // In a real app, this would toggle different views or features
+                });
+            });
+
+            // Handle chart generation button
+            const generateBtn = document.getElementById('generate-chart');
+            
+            generateBtn.addEventListener('click', function() {
+                const name = document.getElementById('name').value;
+                const birthDate = document.getElementById('birth-date').value;
+                const birthTime = document.getElementById('birth-time').value;
+                const birthLocation = document.getElementById('birth-location').value;
+                
+                if (!birthDate) {
+                    alert('Please enter a birth date');
+                    return;
+                }
+                
+                // In a real app, this would trigger the calculation of the chart
+                // For now, we'll just animate the wheel to simulate a regeneration
+                const wheel = document.getElementById('zodiac-wheel');
+                wheel.style.animation = 'rotateIn 1.5s';
+                
+                setTimeout(() => {
+                    wheel.style.animation = '';
+                }, 1500);
+                
+                alert(`Chart generated for ${name || 'Anonymous'}\nBirth: ${birthDate} ${birthTime || ''}\nLocation: ${birthLocation || 'Unknown'}`);
+            });
+        });
+    </script>
+</body>
+</html>
