@@ -519,6 +519,7 @@ const HOUSE_INTERPRETATIONS = {
     }
 },
 // This file contains the core functionality for chart generation and visualization
+};
 
 // Utility function for astronomical calculations
 class AstrologyCalculator {
