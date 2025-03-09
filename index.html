@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intuitive Astrology Wheel</title>
+    <title>Intuitive Astrology Wheel - Enhanced Edition</title>
+    
+    <!-- Base styles from the original -->
     <style>
         :root {
             --primary-color: #6247aa;
@@ -326,12 +328,23 @@
             color: var(--secondary-color);
         }
     </style>
+    
+    <!-- Enhanced additional CSS -->
+    <link rel="stylesheet" href="enhanced-astrology-wheel.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <!-- Celestial Background -->
+    <div class="celestial-background" id="celestial-background"></div>
+
     <header>
         <h1>Intuitive Astrology Wheel</h1>
-        <div class="subtitle">Discover your cosmic blueprint</div>
+        <div class="subtitle">Discover Your Cosmic Blueprint</div>
     </header>
 
     <main>
@@ -360,9 +373,10 @@
                 </div>
             </div>
             <button id="generate-chart">Generate Chart</button>
+            <div class="loading-spinner" id="loading-spinner"></div>
         </div>
 
-        <div class="chart-container">
+        <div class="chart-container" id="wheel-view">
             <svg class="wheel-svg" viewBox="0 0 800 800" id="chart-svg">
                 <!-- Chart will be generated here by JavaScript -->
                 <defs>
@@ -381,6 +395,34 @@
                         <feGaussianBlur stdDeviation="2.5" result="blur"/>
                         <feComposite in="SourceGraphic" in2="blur" operator="over"/>
                     </filter>
+                    
+                    <!-- Planet glow filters -->
+                    <filter id="sun-glow">
+                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                    </filter>
+                    
+                    <filter id="moon-glow">
+                        <feGaussianBlur stdDeviation="2" result="blur"/>
+                        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                    </filter>
+                    
+                    <!-- More detailed zodiac sign patterns -->
+                    <pattern id="fire-pattern" patternUnits="userSpaceOnUse" width="20" height="20">
+                        <path d="M10,0 L20,10 L10,20 L0,10 Z" fill="none" stroke="var(--fire-color)" stroke-width="0.5" opacity="0.2"/>
+                    </pattern>
+                    
+                    <pattern id="earth-pattern" patternUnits="userSpaceOnUse" width="20" height="20">
+                        <rect x="5" y="5" width="10" height="10" fill="none" stroke="var(--earth-color)" stroke-width="0.5" opacity="0.2"/>
+                    </pattern>
+                    
+                    <pattern id="air-pattern" patternUnits="userSpaceOnUse" width="20" height="20">
+                        <circle cx="10" cy="10" r="5" fill="none" stroke="var(--air-color)" stroke-width="0.5" opacity="0.2"/>
+                    </pattern>
+                    
+                    <pattern id="water-pattern" patternUnits="userSpaceOnUse" width="20" height="20">
+                        <path d="M0,10 Q10,0 20,10 Q10,20 0,10 Z" fill="none" stroke="var(--water-color)" stroke-width="0.5" opacity="0.2"/>
+                    </pattern>
                 </defs>
 
                 <!-- Background circle -->
@@ -437,6 +479,33 @@
                     <text x="-100" y="-320" class="zodiac-sign" fill="var(--pisces-color)">♓</text>
                 </g>
                 
+                <!-- Element symbols in wheel corners -->
+                <g id="element-symbols">
+                    <!-- Fire (top-right) -->
+                    <g transform="translate(620, 180)">
+                        <polygon points="0,0 15,-25 30,0" fill="var(--fire-color)" fill-opacity="0.6" />
+                        <text x="15" y="15" text-anchor="middle" fill="var(--fire-color)" font-size="12">Fire</text>
+                    </g>
+                    
+                    <!-- Earth (bottom-right) -->
+                    <g transform="translate(620, 620)">
+                        <circle cx="15" cy="-15" r="15" fill="var(--earth-color)" fill-opacity="0.6" />
+                        <text x="15" y="15" text-anchor="middle" fill="var(--earth-color)" font-size="12">Earth</text>
+                    </g>
+                    
+                    <!-- Air (bottom-left) -->
+                    <g transform="translate(180, 620)">
+                        <rect x="0" y="-30" width="30" height="30" fill="var(--air-color)" fill-opacity="0.6" />
+                        <text x="15" y="15" text-anchor="middle" fill="var(--air-color)" font-size="12">Air</text>
+                    </g>
+                    
+                    <!-- Water (top-left) -->
+                    <g transform="translate(180, 180)">
+                        <path d="M0,0 Q15,-30 30,0 Q15,10 0,0 Z" fill="var(--water-color)" fill-opacity="0.6" />
+                        <text x="15" y="15" text-anchor="middle" fill="var(--water-color)" font-size="12">Water</text>
+                    </g>
+                </g>
+                
                 <!-- Inner circle for houses -->
                 <circle cx="400" cy="400" r="280" fill="white" stroke="#d0c5e5" stroke-width="1"/>
                 
@@ -453,14 +522,31 @@
                 <g id="aspects" transform="translate(400, 400)" stroke-opacity="0.6"></g>
                 
                 <!-- Central design element -->
-                <circle cx="400" cy="400" r="50" fill="url(#wheel-gradient)" stroke="var(--primary-color)" stroke-width="2" />
-                <text x="400" y="405" text-anchor="middle" font-size="20" fill="var(--primary-color)">✧</text>
+                <g id="central-element">
+                    <circle cx="400" cy="400" r="50" fill="url(#wheel-gradient)" stroke="var(--primary-color)" stroke-width="2" />
+                    <circle cx="400" cy="400" r="30" fill="none" stroke="var(--accent-color)" stroke-width="1" />
+                    <text x="400" y="405" text-anchor="middle" font-size="20" fill="var(--primary-color)">✧</text>
+                    
+                    <!-- Decorative rays -->
+                    <g stroke="var(--primary-color)" stroke-width="0.5" opacity="0.5">
+                        <line x1="400" y1="350" x2="400" y2="340" />
+                        <line x1="450" y1="400" x2="460" y2="400" />
+                        <line x1="400" y1="450" x2="400" y2="460" />
+                        <line x1="350" y1="400" x2="340" y2="400" />
+                        
+                        <line x1="435" y1="365" x2="442" y2="358" />
+                        <line x1="435" y1="435" x2="442" y2="442" />
+                        <line x1="365" y1="435" x2="358" y2="442" />
+                        <line x1="365" y1="365" x2="358" y2="358" />
+                    </g>
+                </g>
             </svg>
             
             <!-- Planet info tooltip (appears on hover) -->
             <div class="planet-info" id="planet-info"></div>
         </div>
 
+        <!-- View controls (buttons) -->
         <div class="controls">
             <button class="control-btn active" data-view="wheel">
                 <i class="fas fa-chart-pie"></i> Wheel
@@ -482,6 +568,7 @@
             </button>
         </div>
 
+        <!-- Zodiac sign legend -->
         <div class="legend">
             <div class="legend-item">
                 <div class="legend-color" style="background-color: var(--aries-color);"></div>
@@ -533,6 +620,52 @@
             </div>
         </div>
 
+        <!-- Aspects view (initially hidden) -->
+        <div id="aspects-view" class="view-container" style="display:none;">
+            <h3>Planetary Aspects</h3>
+            <p>This table shows the relationships between planets in your chart. Each aspect represents a specific angle and energy dynamic.</p>
+            <div class="aspects-table-container">
+                <table id="aspects-table" class="aspects-table"></table>
+            </div>
+            <div class="aspects-legend">
+                <h4>Aspect Types</h4>
+                <div class="aspect-types">
+                    <div class="aspect-type">
+                        <span class="aspect-nature harmonious">Harmonious aspects</span> (Trine, Sextile) indicate supportive energy flow and natural talents.
+                    </div>
+                    <div class="aspect-type">
+                        <span class="aspect-nature challenging">Challenging aspects</span> (Square, Opposition) indicate tension, growth opportunities, and motivation for change.
+                    </div>
+                    <div class="aspect-type">
+                        <span class="aspect-nature neutral">Neutral aspects</span> (Conjunction) indicate powerful blending of energies that can be either harmonious or challenging.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Houses view (initially hidden) -->
+        <div id="houses-view" class="view-container" style="display:none;">
+            <h3>House Placements</h3>
+            <p>The twelve houses represent different areas of life. The zodiac sign on each house cusp influences how that life area manifests for you.</p>
+            <div id="houses-container" class="houses-container">
+                <!-- House interpretations will be added here dynamically -->
+            </div>
+        </div>
+
+        <!-- Transits view (initially hidden) -->
+        <div id="transits-view" class="view-container" style="display:none;">
+            <h3>Current Transits</h3>
+            <p>Compare your natal chart with the current planetary positions to understand the energies at play in your life now.</p>
+            <div class="transit-date-selector">
+                <label for="transit-date">Transit Date:</label>
+                <input type="date" id="transit-date" value="">
+                <button id="update-transits" class="transit-button">Update Transits</button>
+            </div>
+            <div id="transits-container" class="transits-container">
+                <!-- Transit data will be added here dynamically -->
+            </div>
+        </div>
+
         <!-- Interpretations panel (hidden by default) -->
         <div class="interpretations-panel" id="interpretations-panel">
             <h2 class="form-title">Intuitive Astrology Reading</h2>
@@ -563,6 +696,16 @@
                     <!-- Aspect interpretations will be added here dynamically -->
                 </div>
             </div>
+            
+            <div class="interpretation-section">
+                <h3>Chart Patterns & Elements</h3>
+                <div class="interpretation-item">
+                    <div class="interpretation-title">Dominant Elements & Energies</div>
+                    <div class="chart-patterns" id="chart-patterns">
+                        <!-- Chart pattern interpretations will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -571,59 +714,44 @@
         <div class="subtitle">Create Your Cosmic Blueprint</div>
     </footer>
 
-    <!-- Include the external JavaScript file -->
-    <script src="astrology-wheel.js"></script>
-
-    <!-- Additional configuration script if needed -->
+    <!-- Include the planet data -->
+    <script src="planets.js"></script>
+    
+    <!-- Include the main JavaScript file -->
+    <script src="enhanced-astrology-wheel.js"></script>
+    
+    <!-- Additional scripting for celestial background -->
     <script>
-        // Add event listeners for the control buttons to toggle views
+        // Create celestial background with stars
         document.addEventListener('DOMContentLoaded', function() {
-            const controlButtons = document.querySelectorAll('.control-btn[data-view]');
-            const interpretationsPanel = document.getElementById('interpretations-panel');
+            const celestialBg = document.getElementById('celestial-background');
+            if (!celestialBg) return;
             
-            controlButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Toggle active button
-                    controlButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Handle different views
-                    const view = this.dataset.view;
-                    
-                    // Show/hide interpretations panel
-                    if (view === 'interpretations') {
-                        interpretationsPanel.style.display = 'block';
-                    } else {
-                        interpretationsPanel.style.display = 'none';
-                    }
-                });
-            });
+            // Create stars
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('celestial-star');
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Random size
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random animation delay
+                star.style.animationDelay = `${Math.random() * 4}s`;
+                
+                celestialBg.appendChild(star);
+            }
             
-            // Handle save button click
-            document.getElementById('save-chart').addEventListener('click', function() {
-                // Create a snapshot of the chart SVG
-                const svg = document.getElementById('chart-svg');
-                const serializer = new XMLSerializer();
-                const svgStr = serializer.serializeToString(svg);
-                
-                // Create a data URL
-                const svgBlob = new Blob([svgStr], {type: 'image/svg+xml;charset=utf-8'});
-                const url = URL.createObjectURL(svgBlob);
-                
-                // Create download link
-                const link = document.createElement('a');
-                link.href = url;
-                
-                // Get name for the file (use the name entered or default)
-                const name = document.getElementById('name').value || 'anonymous';
-                const date = new Date().toISOString().slice(0, 10);
-                link.download = `${name}-astrology-chart-${date}.svg`;
-                
-                // Trigger download
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            });
+            // Set current date in transit date picker
+            const transitDateInput = document.getElementById('transit-date');
+            if (transitDateInput) {
+                transitDateInput.value = new Date().toISOString().split('T')[0];
+            }
         });
     </script>
 </body>
