@@ -2510,92 +2510,88 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Create different view containers
-    function createViewContainers() {
-        const mainElement = document.querySelector('main');
-        if (!mainElement) return;
-        
-        // Check if containers already exist
-        if (document.getElementById('wheel-view')) return;
-        
-        // Chart container is the wheel view
-        const chartContainer = document.querySelector('.chart-container');
-        if (chartContainer) {
-            chartContainer.id = 'wheel-view';
-            chartContainer.classList.add('view-container');
-        }
-        
-        // Create Aspects view
-        const aspectsView = document.createElement('div');
-        aspectsView.id = 'aspects-view';
-        aspectsView.className = 'view-container';
-        aspectsView.style.display = 'none// Create Aspects view
-        const aspectsView = document.createElement('div');
-        aspectsView.id = 'aspects-view';
-        aspectsView.className = 'view-container';
-        aspectsView.style.display = 'none';
-        aspectsView.innerHTML = `
-            <h3>Aspects Table</h3>
-            <p>This table shows the aspects between planets in your chart.</p>
-            <div class="aspects-table-container">
-                <table id="aspects-table" class="aspects-table"></table>
-            </div>
-            <div class="aspects-legend">
-                <h4>Aspect Legend</h4>
-                <div class="aspect-legend-items">
-                    ${ASPECTS.map(aspect => `
-                        <div class="aspect-legend-item">
-                            <div class="aspect-color" style="background-color: ${aspect.color}"></div>
-                            <div class="aspect-name">${aspect.name} (${aspect.angle}°)</div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-        
-        // Create Houses view
-        const housesView = document.createElement('div');
-        housesView.id = 'houses-view';
-        housesView.className = 'view-container';
-        housesView.style.display = 'none';
-        housesView.innerHTML = `
-            <h3>House Placements</h3>
-            <p>Learn about how the zodiac signs influence the different areas of your life.</p>
-            <div id="houses-container" class="houses-container"></div>
-        `;
-        
-        // Create Transits view
-        const transitsView = document.createElement('div');
-        transitsView.id = 'transits-view';
-        transitsView.className = 'view-container';
-        transitsView.style.display = 'none';
-        transitsView.innerHTML = `
-            <h3>Current Transits</h3>
-            <p>Compare your natal chart with the current planetary positions.</p>
-            <div class="transit-date-selector">
-                <label for="transit-date">Transit Date:</label>
-                <input type="date" id="transit-date" value="${new Date().toISOString().slice(0, 10)}">
-                <button id="update-transits">Update Transits</button>
-            </div>
-            <div id="transits-container" class="transits-container"></div>
-        `;
-        
-        // Add views to the document
-        mainElement.insertBefore(aspectsView, document.querySelector('.legend'));
-        mainElement.insertBefore(housesView, document.querySelector('.legend'));
-        mainElement.insertBefore(transitsView, document.querySelector('.legend'));
-        
-        // Add event listener for transit date
-        const transitDateInput = document.getElementById('transit-date');
-        const updateTransitsButton = document.getElementById('update-transits');
-        
-        if (transitDateInput && updateTransitsButton) {
-            updateTransitsButton.addEventListener('click', function() {
-                const transitDate = new Date(transitDateInput.value);
-                chart.updateTransitsView(transitDate);
-            });
-        }
+   // Create different view containers
+function createViewContainers() {
+    const mainElement = document.querySelector('main');
+    if (!mainElement) return;
+    
+    // Check if containers already exist
+    if (document.getElementById('wheel-view')) return;
+    
+    // Chart container is the wheel view
+    const chartContainer = document.querySelector('.chart-container');
+    if (chartContainer) {
+        chartContainer.id = 'wheel-view';
+        chartContainer.classList.add('view-container');
     }
+    
+    // Create Aspects view
+    const aspectsView = document.createElement('div');
+    aspectsView.id = 'aspects-view';
+    aspectsView.className = 'view-container';
+    aspectsView.style.display = 'none';
+    aspectsView.innerHTML = `
+        <h3>Aspects Table</h3>
+        <p>This table shows the aspects between planets in your chart.</p>
+        <div class="aspects-table-container">
+            <table id="aspects-table" class="aspects-table"></table>
+        </div>
+        <div class="aspects-legend">
+            <h4>Aspect Legend</h4>
+            <div class="aspect-legend-items">
+                ${ASPECTS.map(aspect => `
+                    <div class="aspect-legend-item">
+                        <div class="aspect-color" style="background-color: ${aspect.color}"></div>
+                        <div class="aspect-name">${aspect.name} (${aspect.angle}°)</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    
+    // Create Houses view
+    const housesView = document.createElement('div');
+    housesView.id = 'houses-view';
+    housesView.className = 'view-container';
+    housesView.style.display = 'none';
+    housesView.innerHTML = `
+        <h3>House Placements</h3>
+        <p>Learn about how the zodiac signs influence the different areas of your life.</p>
+        <div id="houses-container" class="houses-container"></div>
+    `;
+    
+    // Create Transits view
+    const transitsView = document.createElement('div');
+    transitsView.id = 'transits-view';
+    transitsView.className = 'view-container';
+    transitsView.style.display = 'none';
+    transitsView.innerHTML = `
+        <h3>Current Transits</h3>
+        <p>Compare your natal chart with the current planetary positions.</p>
+        <div class="transit-date-selector">
+            <label for="transit-date">Transit Date:</label>
+            <input type="date" id="transit-date" value="${new Date().toISOString().slice(0, 10)}">
+            <button id="update-transits">Update Transits</button>
+        </div>
+        <div id="transits-container" class="transits-container"></div>
+    `;
+    
+    // Add views to the document
+    mainElement.insertBefore(aspectsView, document.querySelector('.legend'));
+    mainElement.insertBefore(housesView, document.querySelector('.legend'));
+    mainElement.insertBefore(transitsView, document.querySelector('.legend'));
+    
+    // Add event listener for transit date
+    const transitDateInput = document.getElementById('transit-date');
+    const updateTransitsButton = document.getElementById('update-transits');
+    
+    if (transitDateInput && updateTransitsButton) {
+        updateTransitsButton.addEventListener('click', function() {
+            const transitDate = new Date(transitDateInput.value);
+            chart.updateTransitsView(transitDate);
+        });
+    }
+}
     
     // Add particle styles
     function injectParticleStyles() {
