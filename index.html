@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Intuitive Astrology Wheel - Enhanced Edition</title>
-
+  
   <!-- Base styles from the original -->
   <style>
     :root {
@@ -14,6 +14,8 @@
       --background-color: #f8f5ff;
       --text-color: #333;
       --light-text: #f0f0f0;
+
+      /* Colors for the zodiac signs */
       --aries-color: #ff4d4d;
       --taurus-color: #65b891;
       --gemini-color: #ffce56;
@@ -167,18 +169,15 @@
       align-items: center;
       gap: 0.5rem;
     }
-
     .control-btn:hover {
       background: var(--primary-color);
       color: white;
     }
-
     .control-btn.active {
       background: var(--primary-color);
       color: white;
       border-color: var(--primary-color);
     }
-
     .control-btn i {
       font-size: 1.1rem;
     }
@@ -195,13 +194,11 @@
       grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       gap: 1rem;
     }
-
     .legend-item {
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
-
     .legend-color {
       width: 16px;
       height: 16px;
@@ -216,12 +213,11 @@
       margin-top: 2rem;
     }
 
-    /* Zodiac sign styles for the wheel */
+    /* Wheel & segment styles */
     .zodiac-sign {
       font-size: 24px;
       font-weight: bold;
     }
-
     .zodiac-segment {
       transition: transform 0.3s;
     }
@@ -229,7 +225,6 @@
       transform: scale(1.05);
       filter: brightness(1.1);
     }
-
     .aspect-line {
       stroke-width: 1.5;
       transition: stroke-width 0.3s;
@@ -237,7 +232,6 @@
     .aspect-line:hover {
       stroke-width: 3;
     }
-
     .planet-symbol {
       font-size: 18px;
       font-weight: bold;
@@ -265,7 +259,6 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
-
     @keyframes rotateIn {
       from { transform: rotate(-30deg); opacity: 0; }
       to { transform: rotate(0); opacity: 1; }
@@ -318,7 +311,8 @@
     .celestial-background {
       position: fixed;
       top: 0; left: 0;
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       z-index: -1;
       background: radial-gradient(circle at center, #111 0%, #000 100%);
       overflow: hidden;
@@ -330,8 +324,8 @@
       animation: twinkle 2s infinite;
     }
     @keyframes twinkle {
-      0%, 100% { opacity: 0.5; }
-      50% { opacity: 1; }
+      0%,100% { opacity:0.5; }
+      50%     { opacity:1; }
     }
 
     /* Aspects view additions */
@@ -370,7 +364,7 @@
       background: white;
       border-radius: 10px;
       padding: 15px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .house-section h3 {
       color: var(--primary-color);
@@ -490,23 +484,9 @@
             <stop offset="100%" stop-color="#e9dfff" />
           </radialGradient>
 
-          <!-- Some sample patterns and filters for demonstration -->
-          <pattern id="aries-pattern" patternUnits="userSpaceOnUse" width="60" height="60">
-            <circle cx="30" cy="30" r="25" fill="none" stroke="var(--aries-color)" stroke-width="1" opacity="0.2"/>
-          </pattern>
-          
+          <!-- Examples of extra patterns or filters if needed -->
           <filter id="glow">
             <feGaussianBlur stdDeviation="2.5" result="blur"/>
-            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-          </filter>
-
-          <filter id="sun-glow">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
-            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-          </filter>
-
-          <filter id="moon-glow">
-            <feGaussianBlur stdDeviation="2" result="blur"/>
             <feComposite in="SourceGraphic" in2="blur" operator="over"/>
           </filter>
         </defs>
@@ -565,31 +545,7 @@
           <text x="-100" y="-320" class="zodiac-sign" fill="var(--pisces-color)">♓</text>
         </g>
 
-        <!-- Element symbols in wheel corners -->
-        <g id="element-symbols">
-          <!-- Fire (top-right) -->
-          <g transform="translate(620, 180)">
-            <polygon points="0,0 15,-25 30,0" fill="var(--aries-color)" fill-opacity="0.6" />
-            <text x="15" y="15" text-anchor="middle" fill="var(--aries-color)" font-size="12">Fire</text>
-          </g>
-          <!-- Earth (bottom-right) -->
-          <g transform="translate(620, 620)">
-            <circle cx="15" cy="-15" r="15" fill="var(--taurus-color)" fill-opacity="0.6" />
-            <text x="15" y="15" text-anchor="middle" fill="var(--taurus-color)" font-size="12">Earth</text>
-          </g>
-          <!-- Air (bottom-left) -->
-          <g transform="translate(180, 620)">
-            <rect x="0" y="-30" width="30" height="30" fill="var(--gemini-color)" fill-opacity="0.6" />
-            <text x="15" y="15" text-anchor="middle" fill="var(--gemini-color)" font-size="12">Air</text>
-          </g>
-          <!-- Water (top-left) -->
-          <g transform="translate(180, 180)">
-            <path d="M0,0 Q15,-30 30,0 Q15,10 0,0 Z" fill="var(--cancer-color)" fill-opacity="0.6" />
-            <text x="15" y="15" text-anchor="middle" fill="var(--cancer-color)" font-size="12">Water</text>
-          </g>
-        </g>
-
-        <!-- Inner circles for houses -->
+        <!-- Houses group -->
         <circle cx="400" cy="400" r="280" fill="white" stroke="#d0c5e5" stroke-width="1"/>
         <g id="houses" transform="translate(400,400)" stroke="#bbb" stroke-width="1" stroke-dasharray="5,3"></g>
         <circle cx="400" cy="400" r="200" fill="white" stroke="#d0c5e5" stroke-width="1"/>
@@ -600,21 +556,11 @@
         <!-- Aspect lines group -->
         <g id="aspects" transform="translate(400, 400)" stroke-opacity="0.6"></g>
 
-        <!-- Central design -->
+        <!-- Central element (decorative) -->
         <g id="central-element">
           <circle cx="400" cy="400" r="50" fill="url(#wheel-gradient)" stroke="var(--primary-color)" stroke-width="2" />
           <circle cx="400" cy="400" r="30" fill="none" stroke="var(--accent-color)" stroke-width="1" />
           <text x="400" y="405" text-anchor="middle" font-size="20" fill="var(--primary-color)">✧</text>
-          <g stroke="var(--primary-color)" stroke-width="0.5" opacity="0.5">
-            <line x1="400" y1="350" x2="400" y2="340" />
-            <line x1="450" y1="400" x2="460" y2="400" />
-            <line x1="400" y1="450" x2="400" y2="460" />
-            <line x1="350" y1="400" x2="340" y2="400" />
-            <line x1="435" y1="365" x2="442" y2="358" />
-            <line x1="435" y1="435" x2="442" y2="442" />
-            <line x1="365" y1="435" x2="358" y2="442" />
-            <line x1="365" y1="365" x2="358" y2="358" />
-          </g>
         </g>
       </svg>
 
@@ -745,30 +691,34 @@
     <!-- Interpretations panel (hidden by default) -->
     <div class="interpretations-panel" id="interpretations-panel">
       <h2 class="form-title">Intuitive Astrology Reading</h2>
+      
       <div class="interpretation-section">
         <h3>Sun Sign</h3>
         <div class="interpretation-item">
           <div class="interpretation-title" id="sun-sign-title">Sun in Aries</div>
           <div class="interpretation-content" id="sun-sign-content">
-            Your Sun in Aries represents your core essence...
+            Your Sun in Aries...
           </div>
         </div>
       </div>
+      
       <div class="interpretation-section">
         <h3>Moon Sign</h3>
         <div class="interpretation-item">
           <div class="interpretation-title" id="moon-sign-title">Moon in Cancer</div>
           <div class="interpretation-content" id="moon-sign-content">
-            Your Moon in Cancer represents your emotional nature...
+            Your Moon in Cancer...
           </div>
         </div>
       </div>
+      
       <div class="interpretation-section">
         <h3>Key Aspects</h3>
         <div id="aspects-interpretations">
           <!-- Aspect interpretations will be added here dynamically -->
         </div>
       </div>
+      
       <div class="interpretation-section">
         <h3>Chart Patterns &amp; Elements</h3>
         <div class="interpretation-item">
@@ -786,346 +736,37 @@
     <div class="subtitle">Create Your Cosmic Blueprint</div>
   </footer>
 
-  <!-- Inline JavaScript for the entire Enhanced Astrology Wheel logic -->
+  <!-- 1) Planet + House Data (ZODIAC_SIGNS, ASPECTS, PLANETS, etc.) -->
+  <script src="planets.js"></script>
+
+  <!-- 2) Main Wheel Logic (AstrologyCalculator, EnhancedAstrologyChart, DOM) -->
+  <script src="enhanced-astrology-wheel.js"></script>
+
+  <!-- Additional scripting for celestial background stars -->
   <script>
-  /******************************************************************************
-   *  EVERYTHING BELOW IS THE SINGLE-FILE VERSION OF ENHANCED PLANETS + CHART
-   *****************************************************************************/
-
-  /*****************************************************
-   * 1) ZODIAC_SIGNS, 2) ASPECTS, 3) HOUSE_INTERPRETATIONS
-   *****************************************************/
-  const ZODIAC_SIGNS = [
-    { name: "Aries",      symbol: "♈", color: "#ff0000", element: "Fire" },
-    { name: "Taurus",     symbol: "♉", color: "#008000", element: "Earth" },
-    { name: "Gemini",     symbol: "♊", color: "#cc9900", element: "Air" },
-    { name: "Cancer",     symbol: "♋", color: "#339999", element: "Water" },
-    { name: "Leo",        symbol: "♌", color: "#ff9900", element: "Fire" },
-    { name: "Virgo",      symbol: "♍", color: "#669900", element: "Earth" },
-    { name: "Libra",      symbol: "♎", color: "#4da6ff", element: "Air" },
-    { name: "Scorpio",    symbol: "♏", color: "#9900cc", element: "Water" },
-    { name: "Sagittarius",symbol: "♐", color: "#ff66ff", element: "Fire" },
-    { name: "Capricorn",  symbol: "♑", color: "#996633", element: "Earth" },
-    { name: "Aquarius",   symbol: "♒", color: "#33cccc", element: "Air" },
-    { name: "Pisces",     symbol: "♓", color: "#6666cc", element: "Water" },
-  ];
-
-  const ASPECTS = [
-    { name: "Conjunction", angle: 0,   orb: 8, color: "#c05", lineStyle: "solid" },
-    { name: "Sextile",     angle: 60,  orb: 4, color: "#09f", lineStyle: "dashed" },
-    { name: "Square",      angle: 90,  orb: 6, color: "#f00", lineStyle: "solid" },
-    { name: "Trine",       angle: 120, orb: 6, color: "#0c0", lineStyle: "solid" },
-    { name: "Opposition",  angle: 180, orb: 8, color: "#60f", lineStyle: "solid" }
-  ];
-
-  const HOUSE_INTERPRETATIONS = {
-    1: {
-      name: "First House",
-      title: "House of Self",
-      description: "Represents your identity, appearance, and how you project yourself.",
-      interpretations: {
-        "Aries": "...", "Taurus": "...", "Gemini": "...", "Cancer": "...",
-        "Leo": "...", "Virgo": "...", "Libra": "...", "Scorpio": "...",
-        "Sagittarius": "...", "Capricorn": "...", "Aquarius": "...", "Pisces": "..."
-      }
-    },
-    2: {
-      name: "Second House",
-      title: "House of Resources",
-      description: "Represents your values, possessions, and material security.",
-      interpretations: {
-        "Aries": "...", "Taurus": "...", "Gemini": "...", "Cancer": "...",
-        "Leo": "...", "Virgo": "...", "Libra": "...", "Scorpio": "...",
-        "Sagittarius": "...", "Capricorn": "...", "Aquarius": "...", "Pisces": "..."
-      }
-    },
-    3: {
-      name: "Third House",
-      title: "House of Communication",
-      description: "Represents your communication style, learning process, and immediate environment.",
-      interpretations: { /* etc. fill in as needed */ }
-    },
-    4: {
-      name: "Fourth House",
-      title: "House of Home and Family",
-      description: "Represents your roots, private life, and emotional foundation.",
-      interpretations: {}
-    },
-    5: {
-      name: "Fifth House",
-      title: "House of Creativity and Pleasure",
-      description: "Represents creative expression, romance, recreation, and children.",
-      interpretations: {}
-    },
-    6: {
-      name: "Sixth House",
-      title: "House of Service and Health",
-      description: "Represents your work ethic, daily routines, health practices, and service to others.",
-      interpretations: {}
-    },
-    7: {
-      name: "Seventh House",
-      title: "House of Partnership",
-      description: "Represents your approach to one-on-one relationships, marriage, and open interactions.",
-      interpretations: {}
-    },
-    8: {
-      name: "Eighth House",
-      title: "House of Transformation",
-      description: "Represents shared resources, intimacy, transformation, and psychological depths.",
-      interpretations: {}
-    },
-    9: {
-      name: "Ninth House",
-      title: "House of Expansion",
-      description: "Represents higher education, philosophy, travel, and your quest for meaning.",
-      interpretations: {}
-    },
-    10: {
-      name: "Tenth House",
-      title: "House of Career",
-      description: "Represents your public image, career, reputation, and responsibilities.",
-      interpretations: {}
-    },
-    11: {
-      name: "Eleventh House",
-      title: "House of Community",
-      description: "Represents friendships, groups, hopes, and future aspirations.",
-      interpretations: {}
-    },
-    12: {
-      name: "Twelfth House",
-      title: "House of the Subconscious",
-      description: "Represents your hidden self, spiritual connections, and karmic patterns.",
-      interpretations: {}
-    }
-  };
-
-  /************************************************************
-   * 4) PLANETS array with rendering details, interpretations
-   * (Truncated for brevity – you can paste your full definitions)
-   *************************************************************/
-  const PLANETS = [
-    {
-      name: "Sun",
-      symbol: "☉",
-      color: "#ffd000",
-      gradientColors: ["#ffd000", "#ff9500", "#ff4400"],
-      borderColor: "#ff7700",
-      size: 18,
-      description: "The Sun represents your essential self, your purpose, and your vitality.",
-      interpretations: {
-        "Aries": "Your Sun in Aries means ...",
-        "Taurus": "Your Sun in Taurus means ...",
-        /* etc. fill as desired */
-      },
-      renderDetails: { type: "radialGradient", highlightEffects: true, rays: true }
-    },
-    /* Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Chiron, North Node, etc. */
-  ];
-
-  /********************************************************************************
-   * ASTROLOGY CALCULATOR & ENHANCED ASTROLOGY CHART CLASSES
-   * (This is the big single-file version you had previously.)
-   ********************************************************************************/
-  class AstrologyCalculator {
-    constructor() { this.J2000 = 2451545.0; }
-    toJulianDate(date) { /* code from your snippet */ let year=date.getFullYear(); /* ... */ 
-      /* for brevity, your original function goes here fully. */
-      let a = Math.floor((14 - month) / 12);
-      /* ... etc. return jd; */
-      let month = date.getMonth()+1,day=date.getDate(); // complete code...
-      const hours = date.getHours() + date.getMinutes()/60 + date.getSeconds()/3600;
-      a = Math.floor((14 - month)/12);
-      let y = year + 4800 - a;
-      let m = month + 12*a -3;
-      let jd = day + Math.floor((153*m+2)/5) + 365*y + Math.floor(y/4)-Math.floor(y/100)+Math.floor(y/400)-32045 + hours/24;
-      return jd;
-    }
-    degreeToZodiacPosition(deg) { /* your code to map degrees to sign/element */ 
-      let d = deg % 360; if(d<0)d+=360; 
-      const signIndex=Math.floor(d/30); 
-      const degInSign = d%30; 
-      return { sign: ZODIAC_SIGNS[signIndex], degree: degInSign };
-    }
-    formatZodiacPosition(pos) { return `${Math.floor(pos.degree)}° ${pos.sign.name}`; }
-
-    // calculateSunPosition(date), calculateMoonPosition(date), calculatePlanetPosition(planet,date) ...
-    /* ... full code from snippet ... */
-    calculateAllPlanetPositions(date) { /* ... full code ... */ 
-      return [
-        { name:"Sun", degree:this.calculateSunPosition(date)}, 
-        /* etc. */
-      ];
-    }
-    calculateHouseCusps(date, lat, lon) { /* simplified code from snippet */
-      /* ... */
-      return [ /* 12 cusp degrees */ ];
-    }
-  }
-
-  class EnhancedAstrologyChart {
-    constructor(svgElement) {
-      this.svg = svgElement;
-      this.centerX = 400;
-      this.centerY = 400;
-      this.wheelRadius = 350;
-      this.calculator = new AstrologyCalculator();
-      this.planets = [];
-      this.houses = [];
-      this.aspects = [];
-      this.currentView = 'wheel';
-      this.activePlanet = null;
-      this.initializeInteractions();
-    }
-
-    initializeInteractions() {
-      this.svg.addEventListener('mousemove', this.handleMouseMove.bind(this));
-    }
-    handleMouseMove(event) { /* Code for planet tooltip from snippet... */ }
-
-    calculatePositionOnWheel(deg, dist) { /* your code from snippet */ }
-    checkAspect(deg1, deg2) { /* code from snippet using ASPECTS array*/ }
-    calculateAspects() { /* code from snippet */ }
-    drawPlanet(planet, planetData) { /* big code from snippet with type checks... */ }
-    drawAspects() { /* code from snippet */ }
-    drawHouses(houseCusps) { /* code from snippet */ }
-
-    updateInterpretationsPanel() {
-      // For example, update #sun-sign-title, #sun-sign-content, #moon-sign-title, etc.
-      /* code from snippet */
-    }
-    generateAspectInterpretation(aspect){ /* code from snippet */ }
-    updateAspectsTable(){ /* code from snippet */ }
-    updateHousesView(){ /* code from snippet */ }
-    updateTransitsView(transitDate=new Date()){ /* code from snippet */ }
-
-    updateChart(birthData){
-      // parse date/time
-      /* code from snippet that sets this.planets, houses, draws them, etc. */
-      return {
-        planets:[],
-        aspects:[]
-      };
-    }
-
-    setView(viewName){ /* snippet code to show/hide .view-container sections */ }
-    animateChart(){ /* optional snippet code for animations... */ }
-    addMagicalEffects(){ /* snippet code for the star particles or magic particles... */ }
-  }
-
-  /*********************************************
-   * DOM LOADED: SETUP & INITIAL DEMO
-   *********************************************/
-  document.addEventListener('DOMContentLoaded', function() {
-    const celestialBg = document.getElementById('celestial-background');
-    if(celestialBg){
-      // create 100 stars
-      for(let i=0; i<100; i++){
-        const star=document.createElement('div');
+    document.addEventListener('DOMContentLoaded', function() {
+      const celestialBg = document.getElementById('celestial-background');
+      if (!celestialBg) return;
+      
+      // Create stars
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
         star.classList.add('celestial-star');
-        star.style.left=`${Math.random()*100}%`;
-        star.style.top=`${Math.random()*100}%`;
-        const size=Math.random()*2+1;
-        star.style.width=`${size}px`;
-        star.style.height=`${size}px`;
-        star.style.animationDelay=`${Math.random()*4}s`;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        const size = Math.random() * 2 + 1;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.animationDelay = `${Math.random() * 4}s`;
         celestialBg.appendChild(star);
       }
-    }
-    // set current date in the #transit-date input
-    const transitDateInput = document.getElementById('transit-date');
-    if(transitDateInput){
-      transitDateInput.value = new Date().toISOString().split('T')[0];
-    }
-
-    const chartSvg = document.getElementById('chart-svg');
-    if(!chartSvg)return;
-    const chart = new EnhancedAstrologyChart(chartSvg);
-
-    // Insert magical particles if desired
-    chart.addMagicalEffects();
-
-    // handle "Generate Chart"
-    const generateButton = document.getElementById('generate-chart');
-    if(generateButton){
-      generateButton.addEventListener('click', function(){
-        const name = document.getElementById('name')?.value || 'Anonymous';
-        const birthDate = document.getElementById('birth-date')?.value;
-        const birthTime = document.getElementById('birth-time')?.value;
-        const birthLocation = document.getElementById('birth-location')?.value || '';
-
-        if(!birthDate){
-          alert('Please enter a birth date!');
-          return;
-        }
-
-        const chartData = chart.updateChart({
-          date:birthDate,
-          time:birthTime,
-          location:birthLocation,
-          latitude:0, 
-          longitude:0
-        });
-        chart.animateChart();
-        chart.setView('wheel');
-        console.log('Chart generated for:', name);
-        console.log('Planet positions:', chartData.planets);
-        console.log('Aspects:', chartData.aspects);
-      });
-    }
-
-    // handle view buttons
-    const viewButtons = document.querySelectorAll('.control-btn[data-view]');
-    viewButtons.forEach(button=>{
-      button.addEventListener('click', function(){
-        viewButtons.forEach(btn=>btn.classList.remove('active'));
-        this.classList.add('active');
-        const view = this.dataset.view;
-        chart.setView(view);
-      });
+      
+      // Set current date in transit date picker
+      const transitDateInput = document.getElementById('transit-date');
+      if (transitDateInput) {
+        transitDateInput.value = new Date().toISOString().split('T')[0];
+      }
     });
-
-    // handle "Save Chart"
-    const saveButton = document.getElementById('save-chart');
-    if(saveButton){
-      saveButton.addEventListener('click', function(){
-        const svg = document.getElementById('chart-svg');
-        if(!svg)return;
-        const serializer = new XMLSerializer();
-        const svgStr = serializer.serializeToString(svg);
-        const svgBlob = new Blob([svgStr], {type:'image/svg+xml;charset=utf-8'});
-        const url = URL.createObjectURL(svgBlob);
-
-        const link = document.createElement('a');
-        link.href = url;
-        const name = document.getElementById('name')?.value || 'anonymous';
-        const date = new Date().toISOString().slice(0,10);
-        link.download = `${name}-astrology-chart-${date}.svg`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      });
-    }
-
-    // handle transit date update
-    const updateTransitsButton = document.getElementById('update-transits');
-    if(updateTransitsButton){
-      updateTransitsButton.addEventListener('click', function(){
-        const tDateVal = transitDateInput?.value;
-        if(!tDateVal)return;
-        const tDate = new Date(tDateVal);
-        chart.updateTransitsView(tDate);
-      });
-    }
-
-    // Generate an initial chart for "today"
-    setTimeout(()=>{
-      chart.updateChart({date:new Date(), latitude:0, longitude:0});
-      chart.animateChart();
-      chart.setView('wheel');
-    }, 500);
-  });
   </script>
 </body>
 </html>
