@@ -1,0 +1,480 @@
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --accent: #22c55e;
+  --accent-dark: #16a34a;
+  --text: #1f2937;
+  --text-light: #6b7280;
+  --background: #ffffff;
+  --sidebar-bg: #f1f5f9;
+  --border: #e5e7eb;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  line-height: 1.6;
+  background: var(--background);
+}
+
+/* Adjusting the layout to ensure the main content fills the page and is not pushed to the right */
+#container {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
+
+/* Updated Sidebar Styles */
+#sidebar {
+  background: var(--sidebar-bg);
+  padding: 2rem 1rem;
+  border-right: 1px solid var(--border);
+  position: fixed;
+  width: 250px;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 10;
+  transition: transform 0.3s ease;
+  transform: translateX(-250px); /* Start fully collapsed */
+}
+
+#sidebar.expanded {
+  transform: translateX(0);
+}
+
+#sidebar h2 {
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+}
+
+#sidebar ul {
+  list-style: none;
+}
+
+#sidebar li {
+  margin-bottom: 0.5rem;
+}
+
+#sidebar a {
+  color: var(--text);
+  text-decoration: none;
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+#sidebar a:hover, #sidebar a.active {
+  background: var(--primary);
+  color: white;
+}
+
+/* Updated Main Content Area to adjust with sidebar */
+#main-content {
+  margin-left: 50px; /* Space for toggle button only */
+  padding: 2rem;
+  max-width: 100%;
+  position: relative;
+  z-index: 2;
+  background: var(--background);
+  min-height: 100vh;
+  box-sizing: border-box; /* Ensure padding is included in width calculation */
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
+}
+
+#main-content.sidebar-expanded {
+  margin-left: 250px;
+}
+
+/* Section Styles */
+.content-section {
+  display: none;
+  animation: fadeIn 0.3s ease;
+  width: 100%;
+  position: relative;
+}
+
+.content-section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Dashboard Layout */
+.key-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.result-box {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid var(--border);
+}
+
+.result-box h3 {
+  color: var(--text-light);
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.result-box p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+.result-box p:last-child {
+  font-size: 1rem;
+  color: var (--text-light);
+  margin-top: 0.25rem;
+}
+
+/* Charts Container */
+.charts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+  width: 100%;
+}
+
+.chart-box {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid var(--border);
+  min-height: 350px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-box canvas {
+  flex: 1;
+  min-height: 300px;
+  max-height: 400px;
+  width: 100% !important;
+}
+
+.chart-box h3 {
+  margin-bottom: 1rem;
+  color: var(--text);
+  font-size: 1.1rem;
+}
+
+/* Parameter Controls */
+.parameter-group {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid var(--border);
+}
+
+.parameter-group h2 {
+  color: var(--text);
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.slider-container {
+  margin-bottom: 1.5rem;
+}
+
+.slider-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.slider-container input[type="range"] {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.slider-container span {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  background: var(--sidebar-bg);
+  font-weight: 600;
+  color: var(--text);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Buttons */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 2rem 0;
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+  background: var(--primary);
+  color: white;
+}
+
+button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.action-buttons button.secondary {
+  background: var(--sidebar-bg);
+  color: var(--text);
+}
+
+.action-buttons button.secondary:hover {
+  background: var(--border);
+}
+
+/* Toggle Buttons */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.toggle-button {
+  background: var(--sidebar-bg);
+  color: var(--text);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.toggle-button.active {
+  background: var(--primary);
+  color: white;
+}
+
+/* Methodology section */
+#methodology {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#methodology h2 {
+  color: var(--text);
+  margin: 2rem 0 1rem;
+}
+
+#methodology ul, #methodology ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+#methodology li {
+  margin-bottom: 0.75rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  #container {
+    grid-template-columns: 1fr;
+  }
+
+  #sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    display: none; /* Hide by default on mobile */
+  }
+
+  #sidebar.active {
+    transform: translateX(0);
+  }
+
+  .charts-container {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-box {
+    min-height: 300px;
+    margin-bottom: 1rem;
+  }
+
+  .chart-box canvas {
+    min-height: 250px;
+  }
+
+  .key-results {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .result-box {
+    padding: 1.25rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Enhanced Chart Tooltips */
+.chart-tooltip {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem !important;
+  color: white !important;
+  font-size: 0.9rem !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Loading Animation */
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Chart Tooltips */
+.chartjs-tooltip {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem !important;
+  color: white !important;
+  font-size: 0.9rem !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Mobile Navigation */
+.mobile-nav-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+  background: var(--primary);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* Updated Sidebar Toggle Button */
+#sidebar-toggle {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  background: var(--primary);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#sidebar-toggle:hover {
+  background: var(--primary-dark);
+}
+
+@media (max-width: 1024px) {
+  .mobile-nav-toggle {
+    display: block;
+  }
+
+  #sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar.active {
+    transform: translateX(0);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
+
+  #main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  #main-content.sidebar-expanded {
+    margin-left: 0;
+  }
+
+  .charts-container {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-box {
+    min-height: 300px;
+    margin-bottom: 1rem;
+  }
+
+  .result-box {
+    padding: 1.25rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
