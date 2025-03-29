@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmic Blueprint - Interactive Astrology Wheel</title>
+  
+  <!-- Theme and base styles -->
+  <link rel="stylesheet" href="enhanced-astrology-wheel.css">
+  <link rel="stylesheet" href="modern-theme.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+</head>
+<body>
+  <!-- Celestial Background -->
+  <div class="celestial-background" id="celestial-background"></div>
+  
+  <!-- Theme Toggle -->
+  <div class="theme-toggle">
+    <span class="toggle-icon"><i class="fas fa-sun"></i></span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="theme-toggle">
+      <span class="toggle-slider"></span>
+    </label>
+    <span class="toggle-icon"><i class="fas fa-moon"></i></span>
+  </div>
+
+  <!-- Loading animation -->
+  <div class="loading-animation">
+    <div style="text-align: center;">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Calculating Your Cosmic Blueprint...</div>
+    </div>
+  </div>
+
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon">✧</span>
+          <span>Cosmic Blueprint</span>
+        </div>
+        <nav>
+          <ul class="nav-menu">
+            <li><a href="#" class="nav-link active">Home</a></li>
+            <li><a href="#" class="nav-link">About</a></li>
+            <li><a href="#" class="nav-link">Learn</a></li>
+            <li><a href="#" class="nav-link">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="text-center mt-3">
+        <h1>Interactive Astrology Wheel</h1>
+        <div class="subtitle">Discover Your Cosmic Blueprint</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="card birth-form">
+        <h2 class="card-title text-center">Enter Your Birth Details</h2>
+        <form id="chart-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="chart-name">Name</label>
+              <input type="text" id="chart-name" placeholder="Your name">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="birth-date">Birth Date</label>
+              <input type="date" id="birth-date" required>
+            </div>
+            <div class="form-group">
+              <label for="birth-time">Birth Time</label>
+              <input type="time" id="birth-time" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="birth-location">Birth Location</label>
+              <div class="input-group">
+                <input type="text" id="birth-location" required placeholder="City, State, Country">
+                <button type="button" id="open-map-btn" class="btn btn-outline" title="Open Map">
+                  <i class="fas fa-map-marker-alt"></i>
+                </button>
+              </div>
+              <small class="text-muted">Example: "New York, NY, USA" or use the map</small>
+            </div>
+          </div>
+          
+          <div id="map-container" class="rounded shadow" style="display: none; height: 300px; margin: 1rem 0;"></div>
+          
+          <div class="form-row" style="display: none;" id="coordinates-row">
+            <div class="form-group">
+              <label for="latitude">Latitude</label>
+              <input type="text" id="latitude" readonly>
+            </div>
+            <div class="form-group">
+              <label for="longitude">Longitude</label>
+              <input type="text" id="longitude" readonly>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-between mt-3">
+            <button type="button" id="clear-location-btn" class="btn btn-outline">Clear Location</button>
+            <div>
+              <button type="submit" id="generate-chart" class="btn btn-primary">Generate Chart</button>
+              <button type="button" id="save-chart" class="btn btn-secondary">Save Chart</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="chart-container fade-in" id="wheel-view">
+        <svg class="chart-svg" viewBox="0 0 800 800" id="chart-svg">
+        <defs>
+          <radialGradient id="wheel-gradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%" stop-color="#ffffff" />
+            <stop offset="85%" stop-color="#f8f5ff" />
+            <stop offset="100%" stop-color="#e9dfff" />
+          </radialGradient>
+
+          <!-- Examples of extra patterns or filters if needed -->
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2.5" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+
+        <!-- Outer background circle -->
+        <circle cx="400" cy="400" r="390" fill="url(#wheel-gradient)" stroke="#d0c5e5" stroke-width="2"/>
+
+        <!-- Zodiac wheel with 12 segments -->
+        <g id="zodiac-wheel" transform="translate(400, 400)">
+          <!-- Aries: 0° -->
+          <path d="M 0 -350 A 350 350 0 0 1 175 -303.1" fill="var(--aries-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="100" y="-320" class="zodiac-sign" fill="var(--aries-color)">♈</text>
+
+          <!-- Taurus: 30° -->
+          <path d="M 175 -303.1 A 350 350 0 0 1 303.1 -175" fill="var(--taurus-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="245" y="-245" class="zodiac-sign" fill="var(--taurus-color)">♉</text>
+
+          <!-- Gemini: 60° -->
+          <path d="M 303.1 -175 A 350 350 0 0 1 350 0" fill="var(--gemini-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="320" y="-100" class="zodiac-sign" fill="var(--gemini-color)">♊</text>
+
+          <!-- Cancer: 90° -->
+          <path d="M 350 0 A 350 350 0 0 1 303.1 175" fill="var(--cancer-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="320" y="100" class="zodiac-sign" fill="var(--cancer-color)">♋</text>
+
+          <!-- Leo: 120° -->
+          <path d="M 303.1 175 A 350 350 0 0 1 175 303.1" fill="var(--leo-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="245" y="245" class="zodiac-sign" fill="var(--leo-color)">♌</text>
+
+          <!-- Virgo: 150° -->
+          <path d="M 175 303.1 A 350 350 0 0 1 0 350" fill="var(--virgo-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="100" y="320" class="zodiac-sign" fill="var(--virgo-color)">♍</text>
+
+          <!-- Libra: 180° -->
+          <path d="M 0 350 A 350 350 0 0 1 -175 303.1" fill="var(--libra-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="-100" y="320" class="zodiac-sign" fill="var(--libra-color)">♎</text>
+
+          <!-- Scorpio: 210° -->
+          <path d="M -175 303.1 A 350 350 0 0 1 -303.1 175" fill="var(--scorpio-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="-245" y="245" class="zodiac-sign" fill="var(--scorpio-color)">♏</text>
+
+          <!-- Sagittarius: 240° -->
+          <path d="M -303.1 175 A 350 350 0 0 1 -350 0" fill="var(--sagittarius-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="-320" y="100" class="zodiac-sign" fill="var(--sagittarius-color)">♐</text>
+
+          <!-- Capricorn: 270° -->
+          <path d="M -350 0 A 350 350 0 0 1 -303.1 -175" fill="var(--capricorn-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="-320" y="-100" class="zodiac-sign" fill="var(--capricorn-color)">♑</text>
+
+          <!-- Aquarius: 300° -->
+          <path d="M -303.1 -175 A 350 350 0 0 1 -175 -303.1" fill="var(--aquarius-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="-245" y="-245" class="zodiac-sign" fill="var(--aquarius-color)">♒</text>
+
+          <!-- Pisces: 330° -->
+          <path d="M -175 -303.1 A 350 350 0 0 1 0 -350" fill="var(--pisces-color)" fill-opacity="0.15" stroke="#ccc" stroke-width="1" class="zodiac-segment" />
+          <text x="-100" y="-320" class="zodiac-sign" fill="var(--pisces-color)">♓</text>
+        </g>
+
+        <!-- Houses group -->
+        <circle cx="400" cy="400" r="280" fill="white" stroke="#d0c5e5" stroke-width="1"/>
+        <g id="houses" transform="translate(400,400)" stroke="#bbb" stroke-width="1" stroke-dasharray="5,3"></g>
+        <circle cx="400" cy="400" r="200" fill="white" stroke="#d0c5e5" stroke-width="1"/>
+
+        <!-- Planet positions group -->
+        <g id="planets" transform="translate(400, 400)"></g>
+
+        <!-- Aspect lines group -->
+        <g id="aspects" transform="translate(400, 400)" stroke-opacity="0.6"></g>
+
+        <!-- Central element (decorative) -->
+        <g id="central-element">
+          <circle cx="400" cy="400" r="50" fill="url(#wheel-gradient)" stroke="var(--primary-color)" stroke-width="2" />
+          <circle cx="400" cy="400" r="30" fill="none" stroke="var(--accent-color)" stroke-width="1" />
+          <text x="400" y="405" text-anchor="middle" font-size="20" fill="var(--primary-color)">✧</text>
+        </g>
+      </svg>
+
+      <!-- Tooltip for planets on hover -->
+      <div class="planet-info" id="planet-info"></div>
+    </div>
+    
+    <!-- History Panel -->
+    <div class="history-panel" id="history-panel">
+      <h2>Chart History</h2>
+      <div class="history-content">
+        <p class="empty-message">No saved charts yet.</p>
+      </div>
+    </div>
+
+    <!-- View controls -->
+    <div class="controls">
+      <button class="control-btn active" data-view="wheel">
+        <i class="fas fa-chart-pie"></i> Wheel
+      </button>
+      <button class="control-btn" data-view="aspects">
+        <i class="fas fa-table"></i> Aspects
+      </button>
+      <button class="control-btn" data-view="houses">
+        <i class="fas fa-sliders-h"></i> Houses
+      </button>
+      <button class="control-btn" data-view="transits">
+        <i class="fas fa-calendar-alt"></i> Transits
+      </button>
+      <button class="control-btn" data-view="interpretations">
+        <i class="fas fa-book"></i> Readings
+      </button>
+      <button class="control-btn" id="save-chart">
+        <i class="fas fa-download"></i> Save
+      </button>
+      <button class="control-btn" id="settings-btn">
+        <i class="fas fa-cog"></i> Settings
+      </button>
+    </div>
+
+    <!-- Zodiac sign legend -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--aries-color);"></div>
+        <span>Aries</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--taurus-color);"></div>
+        <span>Taurus</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--gemini-color);"></div>
+        <span>Gemini</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--cancer-color);"></div>
+        <span>Cancer</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--leo-color);"></div>
+        <span>Leo</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--virgo-color);"></div>
+        <span>Virgo</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--libra-color);"></div>
+        <span>Libra</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--scorpio-color);"></div>
+        <span>Scorpio</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--sagittarius-color);"></div>
+        <span>Sagittarius</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--capricorn-color);"></div>
+        <span>Capricorn</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--aquarius-color);"></div>
+        <span>Aquarius</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: var(--pisces-color);"></div>
+        <span>Pisces</span>
+      </div>
+    </div>
+
+    <!-- Aspects view (hidden by default) -->
+    <div id="aspects-view" class="view-container" style="display:none;">
+      <h3>Planetary Aspects</h3>
+      <p>This table shows the relationships between planets in your chart. Each aspect represents a specific angle and energy dynamic.</p>
+      <div class="aspects-table-container">
+        <table id="aspects-table" class="aspects-table"></table>
+      </div>
+      <div class="aspects-legend">
+        <h4>Aspect Types</h4>
+        <div class="aspect-types">
+          <div class="aspect-type">
+            <span class="aspect-nature harmonious">Harmonious aspects</span> (Trine, Sextile) indicate supportive energy flow and natural talents.
+          </div>
+          <div class="aspect-type">
+            <span class="aspect-nature challenging">Challenging aspects</span> (Square, Opposition) indicate tension, growth opportunities, and motivation for change.
+          </div>
+          <div class="aspect-type">
+            <span class="aspect-nature neutral">Neutral aspects</span> (Conjunction) indicate powerful blending of energies that can be either harmonious or challenging.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Houses view (hidden by default) -->
+    <div id="houses-view" class="view-container" style="display:none;">
+      <h3>House Placements</h3>
+      <p>The twelve houses represent different areas of life. The zodiac sign on each house cusp influences how that life area manifests for you.</p>
+      <div id="houses-container" class="houses-container">
+        <!-- House interpretations will be injected dynamically -->
+      </div>
+    </div>
+
+    <!-- Transits view (hidden by default) -->
+    <div id="transits-view" class="view-container" style="display:none;">
+      <h3>Current Transits</h3>
+      <p>Compare your natal chart with the current planetary positions to understand the energies at play in your life now.</p>
+      <div class="transit-date-selector">
+        <label for="transit-date">Transit Date:</label>
+        <input type="date" id="transit-date" value="">
+        <button id="update-transits" class="transit-button">Update Transits</button>
+      </div>
+      <div id="transits-container" class="transits-container">
+        <!-- Transit data will be added here dynamically -->
+      </div>
+    </div>
+
+    <!-- Interpretations panel -->
+    <div class="interpretations-panel" id="interpretations-panel" style="background-color: rgba(0, 0, 0, 0.8); color: white;">
+      <h2 class="form-title" style="color: white;">Intuitive Astrology Reading</h2>
+      
+      <!-- Sun and Moon Section -->
+      <div class="interpretation-section">
+        <h3 style="color: white;">Luminaries</h3>
+        <div class="interpretation-item">
+          <div class="interpretation-title" id="sun-sign-title" style="color: var(--accent-color);"></div>
+          <div class="interpretation-content" id="sun-sign-content" style="color: white;"></div>
+        </div>
+        <div class="interpretation-item">
+          <div class="interpretation-title" id="moon-sign-title" style="color: var(--accent-color);"></div>
+          <div class="interpretation-content" id="moon-sign-content" style="color: white;"></div>
+        </div>
+      </div>
+      
+      <!-- Zodiac Signs Section -->
+      <div class="interpretation-section">
+        <h3 style="color: white;">Zodiac Signs & Placements</h3>
+        <div id="zodiac-interpretations"></div>
+      </div>
+      
+      <!-- Aspects Section -->
+      <div class="interpretation-section">
+        <h3 style="color: white;">Key Aspects</h3>
+        <div id="aspects-interpretations" style="color: white;"></div>
+      </div>
+      
+      <!-- Chart Patterns Section -->
+      <div class="interpretation-section">
+        <h3 style="color: white;">Chart Patterns & Elements</h3>
+        <div class="interpretation-item">
+          <div class="interpretation-title" style="color: var(--accent-color);">Dominant Elements & Energies</div>
+          <div id="chart-patterns" style="color: white;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Planet detail panel -->
+    <div class="planet-detail-panel" id="planet-detail-panel">
+      <div class="panel-header">
+        <h3 class="planet-name"></h3>
+        <button class="close-panel">×</button>
+      </div>
+      <div class="panel-content">
+        <div class="planet-basics">
+          <div class="planet-position">
+            <span class="label">Position:</span>
+            <span class="value"></span>
+          </div>
+          <div class="planet-house">
+            <span class="label">House:</span>
+            <span class="value"></span>
+          </div>
+          <div class="planet-aspects">
+            <span class="label">Major Aspects:</span>
+            <div class="aspects-list"></div>
+          </div>
+        </div>
+        <div class="planet-interpretation"></div>
+      </div>
+    </div>
+
+    <!-- Settings dialog -->
+    <div class="settings-dialog" id="settings-dialog">
+      <div class="dialog-content glass-card">
+        <h3>API Configuration</h3>
+        <div class="form-group">
+          <label for="astro-api-key">Astrology API Key</label>
+          <input type="text" id="astro-api-key" placeholder="Enter your astrology API key">
+          <small>Get your API key from <a href="https://api.astrologer.app" target="_blank">api.astrologer.app</a></small>
+        </div>
+        <div class="form-group">
+          <label for="geocoding-api-key">Geocoding API Key</label>
+          <input type="text" id="geocoding-api-key" placeholder="Enter your OpenCage API key">
+          <small>Get your API key from <a href="https://opencagedata.com" target="_blank">OpenCage</a></small>
+        </div>
+        <div class="form-group">
+          <button id="save-settings" class="primary">Save Settings</button>
+          <button id="close-settings" class="secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings notification -->
+    <div class="notification" id="settings-notification" style="display: none;">
+      <div class="notification-content">
+        <span class="notification-message"></span>
+        <button class="close-notification">×</button>
+      </div>
+    </div>
+
+    <!-- Status notification -->
+    <div class="notification" id="status-notification">
+      <div class="notification-content">
+        <span class="notification-message"></span>
+        <button class="close-notification">×</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>Intuitive Astrology Wheel © 2025</div>
+    <div class="subtitle">Create Your Cosmic Blueprint</div>
+  </footer>
+
+  <!-- Planet Data Constants -->
+  <script type="module" src="planets.js"></script>
+
+  <!-- Main Wheel Logic -->
+  <script type="module" src="enhanced-astrology-wheel.js"></script>
+
+  <!-- Additional scripting for celestial background stars -->
+  <script type="module">
+    document.addEventListener('DOMContentLoaded', function() {
+        const celestialBg = document.getElementById('celestial-background');
+        if (!celestialBg) return;
+        
+        // Create a canvas for better star rendering
+        const canvas = document.createElement('canvas');
+        canvas.style.position = 'absolute';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        celestialBg.appendChild(canvas);
+        
+        // Setup canvas
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        
+        // Star properties
+        const stars = [];
+        const constellations = [
+            {name: 'Ursa Major', points: [[100, 100], [120, 110], [140, 120], [160, 140], [180, 160], [200, 180], [220, 200]]},
+            {name: 'Orion', points: [[300, 100], [320, 120], [340, 140], [360, 160], [380, 180], [400, 200], [420, 220]]},
+            // Add more constellations as needed
+        ];
+        
+        // Create stars
+        function createStars(count) {
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2 + 1,
+                    brightness: Math.random(),
+                    speed: Math.random() * 0.05
+                });
+            }
+        }
+        
+        // Draw stars
+        function drawStars() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw stars
+            stars.forEach(star => {
+                ctx.beginPath();
+                const brightness = (Math.sin(Date.now() * star.speed) + 1) / 2;
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.brightness * brightness})`;
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            // Draw constellations
+            constellations.forEach(constellation => {
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 1;
+                constellation.points.forEach((point, index) => {
+                    if (index === 0) {
+                        ctx.moveTo(point[0], point[1]);
+                    } else {
+                        ctx.lineTo(point[0], point[1]);
+                    }
+                });
+                ctx.stroke();
+                
+                // Draw constellation stars
+                constellation.points.forEach(point => {
+                    ctx.beginPath();
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.arc(point[0], point[1], 2, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            });
+            
+            requestAnimationFrame(drawStars);
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            stars.length = 0;
+            createStars(200);
+        });
+        
+        // Initialize
+        createStars(200);
+        drawStars();
+        
+        // Set current date in transit date picker
+        const transitDateInput = document.getElementById('transit-date');
+        if (transitDateInput) {
+            transitDateInput.value = new Date().toISOString().split('T')[0];
+        }
+    });
+  </script>
+  
+  <!-- Theme Toggle Script -->
+  <script type="module" src="theme-toggle.js"></script>
+  
+  <!-- History Panel Script -->
+  <script type="module" src="history-panel.js"></script>
+  
+  <!-- Chart Utilities Script -->
+  <script type="module" src="chart-utils.js"></script>
+  
+  <!-- Zodiac Data Script -->
+  <script type="module" src="zodiac-data.ts"></script>
+</body>
+</html>

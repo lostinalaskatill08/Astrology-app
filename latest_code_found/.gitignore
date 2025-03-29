@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Production
+dist/
+build/
+
+# Environment variables
+.env
+.env*.local
+
+# Editor
+.DS_Store
+.idea/
+.vscode/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local development
+.env.local
+.env.development
+
+# Testing
+coverage/
+.nyc_output/
+
+# Package manager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# TypeScript
+*.tsbuildinfo

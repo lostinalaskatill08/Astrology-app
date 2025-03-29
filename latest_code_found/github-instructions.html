@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Push Instructions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #6a5acd;
+        }
+        .container {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: Consolas, monospace;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        ol li, ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>GitHub Push Instructions</h1>
+    
+    <div class="container">
+        <h2>What We've Done</h2>
+        <p>We've made several improvements to the Astrology app:</p>
+        <ul>
+            <li>Fixed module system issues by adding <code>type="module"</code> to script tags</li>
+            <li>Improved state management with Zustand</li>
+            <li>Enhanced the user interface with dark/light theme toggle</li>
+            <li>Added new features like chart history functionality</li>
+            <li>Improved code organization with TypeScript support</li>
+        </ul>
+        <p>All these changes have been committed to a local Git repository, but we need to push them to GitHub.</p>
+    </div>
+
+    <div class="container">
+        <h2>Option 1: Using the Batch Script</h2>
+        <p>We've created a batch script to help you push the changes to GitHub:</p>
+        <ol>
+            <li>Open File Explorer and navigate to <code>c:/Users/Admin/Desktop/waste-to-energy-calculator/Astrology-app</code></li>
+            <li>Double-click on <code>push-to-github.bat</code></li>
+            <li>If prompted for credentials, use your GitHub username and the personal access token as the password</li>
+        </ol>
+    </div>
+
+    <div class="container">
+        <h2>Option 2: Using the PowerShell Script</h2>
+        <p>We've also created a PowerShell script with your credentials embedded:</p>
+        <ol>
+            <li>Right-click on <code>push-to-github.ps1</code> and select "Run with PowerShell"</li>
+            <li>If you get a security warning, you may need to run the following command in PowerShell first:</li>
+            <code>Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass</code>
+        </ol>
+    </div>
+
+    <div class="container">
+        <h2>Option 3: Using GitHub Desktop</h2>
+        <p>If the scripts don't work, you can use GitHub Desktop:</p>
+        <ol>
+            <li>Install GitHub Desktop from <a href="https://desktop.github.com/">https://desktop.github.com/</a></li>
+            <li>Open GitHub Desktop and sign in with your GitHub account</li>
+            <li>Add the local repository: File > Add local repository > Browse to <code>c:/Users/Admin/Desktop/waste-to-energy-calculator/Astrology-app</code></li>
+            <li>Click "Publish repository" and select your GitHub account</li>
+            <li>Make sure the repository name is <code>Astrology-app</code></li>
+            <li>Click "Publish repository"</li>
+        </ol>
+    </div>
+
+    <div class="warning">
+        <h3>Important Note</h3>
+        <p>The PowerShell script contains your personal access token. For security reasons, you should delete this file after using it.</p>
+    </div>
+
+    <div class="success">
+        <h3>Next Steps</h3>
+        <p>After pushing to GitHub, you can view your repository at <a href="https://github.com/lostinalaskatill08/Astrology-app">https://github.com/lostinalaskatill08/Astrology-app</a></p>
+        <p>To enable GitHub Pages for your repository:</p>
+        <ol>
+            <li>Go to your repository on GitHub</li>
+            <li>Click on "Settings"</li>
+            <li>Scroll down to "GitHub Pages"</li>
+            <li>Select "main" branch as the source</li>
+            <li>Click "Save"</li>
+        </ol>
+        <p>Your site will be published at <a href="https://lostinalaskatill08.github.io/Astrology-app/">https://lostinalaskatill08.github.io/Astrology-app/</a></p>
+    </div>
+</body>
+</html>
